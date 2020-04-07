@@ -1,3 +1,4 @@
+import 'package:engage_parse_admin/models/game_model.dart';
 import 'package:engage_parse_admin/project.dart';
 import 'package:engage_parse_admin/routes.dart';
 import 'package:engage_parse_admin/widgets/collections_list.dart';
@@ -18,7 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Map objects = {};
   @override
   Widget build(BuildContext context) {
-    List collections = [];
+    List collections = [
+      Game(),
+    ];
     return Scaffold(
         appBar: AppBar(title: Text(Project.name), actions: routes(context)),
         body: ListView(
