@@ -17,7 +17,7 @@ import 'package:smart_select/smart_select.dart';
   [ ] 
  */
 
-class GRInput<T> extends StatefulWidget {
+class EngageInput<T> extends StatefulWidget {
   final EdgeInsets margin;
   final String hintText;
   final String labelText;
@@ -45,7 +45,7 @@ class GRInput<T> extends StatefulWidget {
   final ValueChanged<dynamic> onSubmitted;
   final TextEditingController controller;
 
-  const GRInput({
+  const EngageInput({
     Key key,
     this.margin = const EdgeInsets.only(bottom: 10),
     this.hintText = '',
@@ -76,10 +76,10 @@ class GRInput<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  GRInputState createState() => GRInputState<T>();
+  EngageInputState createState() => EngageInputState<T>();
 }
 
-class GRInputState<T> extends State<GRInput> {
+class EngageInputState<T> extends State<EngageInput> {
   bool obscureText = false;
   bool _focused = false;
   FocusNode _node;
@@ -91,7 +91,7 @@ class GRInputState<T> extends State<GRInput> {
   TextInputType inputType;
   TextEditingController _controller;
 
-  GRInputState();
+  EngageInputState();
 
   @override
   void initState() {

@@ -79,7 +79,7 @@ class _QuickListState extends State<QuickList> {
           children: <Widget>[
             Container(
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                child: GRInput(
+                child: EngageInput(
                   isDarkBackground: true,
                   labelText: 'Search',
                   // helperText: 'e.g. hello@engagefitness.io',

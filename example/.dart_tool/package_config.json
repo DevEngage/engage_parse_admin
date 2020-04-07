@@ -104,6 +104,12 @@
       "languageVersion": "2.1"
     },
     {
+      "name": "engage_parse_admin",
+      "rootUri": "../../",
+      "packageUri": "lib/",
+      "languageVersion": "2.3"
+    },
+    {
       "name": "file_picker",
       "rootUri": "file:///Users/th3brink/development/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-1.5.1",
       "packageUri": "lib/",
@@ -446,7 +452,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-04-07T05:23:29.014792Z",
+  "generated": "2020-04-07T15:25:11.088348Z",
   "generator": "pub",
   "generatorVersion": "2.8.0-dev.12.0.flutter-9983424a3c"
 }

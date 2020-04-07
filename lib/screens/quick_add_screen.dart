@@ -320,10 +320,10 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
             children: segmentList,
             groupValue: currentSegment,
           ),
-          if (form.length > 0 && currentSegment.value == 0)
+          if (form.length > 0 && currentSegment == 0)
             Expanded(child: buildSinglePage(context, collection, false)),
           ...formSegment.map((value) {
-            if (form.length > 0 && currentSegment.value == value.index) {
+            if (form.length > 0 && currentSegment == value.index) {
               return Expanded(child: quickSegList(context, value));
             }
             return Text('');
@@ -422,7 +422,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
   }
 
   buildInput(QuickAdd qa) {
-    return GRInput(
+    return EngageInput(
       margin: qa.margin,
       hintText: qa.hintText,
       labelText: qa.labelText,

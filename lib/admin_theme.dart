@@ -102,7 +102,7 @@ class AppTheme {
   );
 }
 
-ThemeData themeEF = ThemeData(
+ThemeData theme = ThemeData(
   scaffoldBackgroundColor: AppTheme.figmaMidDark,
   primaryColor: AppTheme.figmaPurple,
   accentColor: AppTheme.figmaGreen,
