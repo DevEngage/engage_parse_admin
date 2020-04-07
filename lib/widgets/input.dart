@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:games_revealed/theme.dart';
+import 'package:engage_parse_admin/admin_theme.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
@@ -208,7 +208,7 @@ class GRInputState<T> extends State<GRInput> {
           initialValue: _value,
           onFieldSubmitted: widget.onSubmitted,
           inputFormatters: getMask(),
-          cursorColor: AppTheme.colorOrange,
+          cursorColor: Colors.blue,
           style: style,
           decoration: getInputDecoration());
     else
@@ -223,7 +223,7 @@ class GRInputState<T> extends State<GRInput> {
           initialValue: _value,
           onFieldSubmitted: widget.onSubmitted,
           inputFormatters: getMask(),
-          cursorColor: AppTheme.colorOrange,
+          cursorColor: Colors.blue,
           controller: _controller,
           style: style,
           decoration: getInputDecoration());
@@ -459,11 +459,11 @@ class GRInputState<T> extends State<GRInput> {
 
   getDecoration() {
     return BoxDecoration(
-      color: widget.isDarkBackground ? AppTheme.colorOrange : null,
+      color: widget.isDarkBackground ? Colors.blue : null,
       borderRadius: BorderRadius.all(Radius.circular(6)),
       border: Border.all(
           color: widget.isDarkBackground
-              ? AppTheme.colorOrange
+              ? Colors.blue
               : Colors.grey.withOpacity(.6)),
     );
     // hintText: widget.hintText,
@@ -485,7 +485,7 @@ class GRInputState<T> extends State<GRInput> {
           );
     var outline = widget.isDarkBackground
         ? OutlineInputBorder()
-            .copyWith(borderSide: BorderSide(color: AppTheme.colorOrange))
+            .copyWith(borderSide: BorderSide(color: Colors.blue))
         : OutlineInputBorder();
     return InputDecoration(
         hintText: widget.hintText,

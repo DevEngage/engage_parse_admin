@@ -2,11 +2,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:games_revealed/theme.dart';
-import 'package:games_revealed/widgets/confirm_widget.dart';
-import 'package:games_revealed/widgets/input.dart';
-import 'package:games_revealed/widgets/quick_list.dart';
+import 'package:engage_parse_admin/admin_theme.dart';
+import 'package:engage_parse_admin/widgets/confirm_widget.dart';
+import 'package:engage_parse_admin/widgets/input.dart';
+import 'package:engage_parse_admin/widgets/quick_list.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
@@ -118,20 +117,43 @@ abstract class EngageParseObject extends QuickAddParse {
   removeFromArray(field, model);
 }
 
-class QuickAddScreen extends HookWidget {
-  // List<QuickAdd> form;
+class QuickAddScreen extends StatefulWidget {
+  EngageParseObject collection;
+  bool showAppBar;
+  String addRoute;
+
+  QuickAddScreen({
+    Key key,
+    this.collection,
+    this.showAppBar = true,
+    this.addRoute = '/quickAdd',
+  }) : super(key: key);
+
+  @override
+  _QuickAddScreenState createState() => _QuickAddScreenState();
+}
+
+class _QuickAddScreenState extends State<QuickAddScreen> {
   EngageParseObject collection;
   EngageParseObject parent;
   String arrayToSave;
   dynamic model;
-  final bool showAppBar;
+  bool showAppBar;
   String addRoute;
+  int currentSegment = 0;
 
-  QuickAddScreen({
-    this.collection,
-    this.showAppBar = true,
-    this.addRoute = '/quickAdd',
-  });
+  @override
+  void initState() {
+    super.initState();
+    collection = widget.collection;
+    showAppBar = widget.showAppBar;
+    addRoute = widget.addRoute;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   Map<int, Widget> buildSegments(List<QuickAddSegment> segments) {
     Map<int, Widget> children = <int, Widget>{
@@ -275,7 +297,7 @@ class QuickAddScreen extends HookWidget {
     List<QuickAddTab> formTab = collection.getTabForm();
     List<QuickAdd> form = collection.getForm();
     List<QuickAddSegment> formSegment = collection.getSegmentForm();
-    final currentSegment = useState<int>(0);
+
     final segmentList = buildSegments(formSegment);
     return Scaffold(
         appBar: showAppBar
@@ -292,11 +314,11 @@ class QuickAddScreen extends HookWidget {
             height: 14,
           ),
           CupertinoSlidingSegmentedControl(
-            backgroundColor: AppTheme.colorPurple,
-            thumbColor: AppTheme.colorOrange,
-            onValueChanged: (value) => currentSegment.value = value,
+            backgroundColor: Colors.purpleAccent,
+            thumbColor: AppTheme.figmaPurple,
+            onValueChanged: (value) => setState(() => currentSegment = value),
             children: segmentList,
-            groupValue: currentSegment.value,
+            groupValue: currentSegment,
           ),
           if (form.length > 0 && currentSegment.value == 0)
             Expanded(child: buildSinglePage(context, collection, false)),

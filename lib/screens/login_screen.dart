@@ -1,8 +1,8 @@
 // import 'package:engage_fitness_app/appTheme.dart';
-import 'package:games_revealed/theme.dart';
-import 'package:admin/providers/user_provider.dart';
-import 'package:admin/screens/home_screen.dart';
-import 'package:admin/widgets/confirm_widget.dart';
+import 'package:engage_parse_admin/admin_theme.dart';
+import 'package:engage_parse_admin/providers/user_provider.dart';
+import 'package:engage_parse_admin/screens/home_screen.dart';
+import 'package:engage_parse_admin/widgets/confirm_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
@@ -81,7 +81,7 @@ class LoginScreen extends StatelessWidget {
       backgroundColor: AppTheme.figmaDarkPurple,
       body: FlutterLogin(
         theme: LoginTheme(
-          primaryColor: AppTheme.colorOrange,
+          primaryColor: Colors.blue,
           // buttonStyle: TextStyle(backgroundColor: AppTheme.figmaDarkPurple),
         ),
         title: 'Games Revealed',

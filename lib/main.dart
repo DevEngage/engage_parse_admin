@@ -1,5 +1,4 @@
 import 'package:engage_parse_admin/project.dart';
-import 'package:engage_parse_admin/providers/parse_provider.dart';
 import 'package:engage_parse_admin/providers/user_provider.dart';
 import 'package:engage_parse_admin/router.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +40,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => ParseProvider()),
           ChangeNotifierProvider(create: (_) => UserProvider(user)),
         ],
         child: MaterialApp(

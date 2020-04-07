@@ -1,8 +1,7 @@
 import 'package:engage_parse_admin/project.dart';
 import 'package:engage_parse_admin/routes.dart';
-import 'package:admin/widgets/collections_list.dart';
-import 'package:games_revealed/models/quiz_model.dart';
-import 'package:games_revealed/widgets/input.dart';
+import 'package:engage_parse_admin/widgets/collections_list.dart';
+import 'package:engage_parse_admin/widgets/input.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_select/smart_select.dart';
 
@@ -19,9 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Map objects = {};
   @override
   Widget build(BuildContext context) {
-    List collections = [
-      Quiz(),
-    ];
+    List collections = [];
     return Scaffold(
         appBar: AppBar(title: Text(Project.name), actions: routes(context)),
         body: ListView(

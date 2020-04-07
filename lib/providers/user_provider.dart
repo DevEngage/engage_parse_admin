@@ -1,4 +1,4 @@
-import 'package:admin/models/user_model.dart';
+import 'package:engage_parse_admin/models/user_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 

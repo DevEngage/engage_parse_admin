@@ -1,4 +1,4 @@
-import 'package:games_revealed/widgets/quick_list.dart';
+import 'package:engage_parse_admin/widgets/quick_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

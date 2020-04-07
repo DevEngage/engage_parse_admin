@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:games_revealed/screens/quick_add_screen.dart';
-import 'package:games_revealed/widgets/input.dart';
+import 'package:engage_parse_admin/screens/quick_add_screen.dart';
+import 'package:engage_parse_admin/widgets/input.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
 class QuickList extends StatefulWidget {

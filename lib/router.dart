@@ -1,6 +1,6 @@
-import 'package:admin/screens/home_screen.dart';
-import 'package:admin/screens/login_screen.dart';
-import 'package:games_revealed/screens/quick_add_screen.dart';
+import 'package:engage_parse_admin/screens/home_screen.dart';
+import 'package:engage_parse_admin/screens/login_screen.dart';
+import 'package:engage_parse_admin/screens/quick_add_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
