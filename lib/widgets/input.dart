@@ -1,11 +1,15 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:engage_parse_admin/classes/engage_parse_file.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_picker_cross/file_picker_cross.dart';
+// import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:engage_parse_admin/admin_theme.dart';
+// import 'package:image_picker_web/image_picker_web.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
@@ -27,7 +31,7 @@ class EngageInput<T> extends StatefulWidget {
   final String error;
   final TextInputType inputType;
   final TextInputAction inputAction;
-  final FileTypeCross fileType;
+  final FileType fileType;
   final bool autofocus;
   final bool correct;
   final bool readOnly;
@@ -41,6 +45,7 @@ class EngageInput<T> extends StatefulWidget {
   final T collection;
   final List<Map<String, String>> items;
   final List<SmartSelectOption<String>> smartOptions;
+  final int debounce;
   final ValueChanged<dynamic> onChanged;
   final ValueChanged<dynamic> onSubmitted;
   final TextEditingController controller;
@@ -54,7 +59,7 @@ class EngageInput<T> extends StatefulWidget {
     this.error,
     this.inputType = TextInputType.text,
     this.inputAction = TextInputAction.done,
-    this.fileType = FileTypeCross.any,
+    this.fileType = FileType.any,
     this.type = 'text',
     this.initialValue,
     this.autofocus = false,
@@ -70,6 +75,7 @@ class EngageInput<T> extends StatefulWidget {
     this.items,
     this.smartOptions,
     this.node,
+    this.debounce = 0,
     this.onChanged,
     this.onSubmitted,
     this.controller,
@@ -90,6 +96,7 @@ class EngageInputState<T> extends State<EngageInput> {
   dynamic _value;
   TextInputType inputType;
   TextEditingController _controller;
+  Timer searchOnStoppedTyping;
 
   EngageInputState();
 
@@ -368,14 +375,15 @@ class EngageInputState<T> extends State<EngageInput> {
         children: <Widget>[
           Text(widget.labelText,
               style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
-          if (_value is ParseFile)
+          if (_value is ParseFile || _value is EngageParseFile)
             GestureDetector(
                 onTap: () async {
-                  FilePickerCross picker =
-                      FilePickerCross(type: FileTypeCross.image);
-                  await picker.pick();
-                  File file = File.fromRawPath(picker.toUint8List());
-                  handleChanged(file);
+                  // FilePickerCross picker =
+                  //     FilePickerCross(type: FileType.image);
+                  // await picker.pick();
+                  // // EngageParseFile(bytes: picker.toUint8List(), ext: picker.fileExtension, name: picker.toString());
+                  // File file = File.fromRawPath(picker.toUint8List());
+                  // handleChanged(file);
                 },
                 child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -384,11 +392,18 @@ class EngageInputState<T> extends State<EngageInput> {
             FlatButton(
               child: Text('Upload Image'),
               onPressed: () async {
-                FilePickerCross picker =
-                    FilePickerCross(type: FileTypeCross.image);
-                await picker.pick();
-                File file = File.fromRawPath(picker.toUint8List());
-                handleChanged(file);
+                // FilePickerCross picker = FilePickerCross(type: FileType.image);
+                // await picker.pick();
+                // print(picker.fileExtension);
+                // print(picker.toUint8List());
+                // var file = EngageParseFile(
+                //     bytes: picker.toUint8List(), ext: 'png', name: 'test');
+
+                // var file =
+                //     await ImagePickerWeb.getImage(outputType: ImageType.bytes);
+                // file.getImageInfo
+                // print(file.toString());
+                // if (file != null) handleChanged(picker.toUint8List());
               },
             ),
         ],
@@ -406,10 +421,10 @@ class EngageInputState<T> extends State<EngageInput> {
           if (_value is ParseFile)
             GestureDetector(
               onTap: () async {
-                FilePickerCross picker = FilePickerCross(type: widget.fileType);
-                await picker.pick();
-                File file = File.fromRawPath(picker.toUint8List());
-                handleChanged(file);
+                // FilePickerCross picker = FilePickerCross(type: widget.fileType);
+                // await picker.pick();
+                // File file = File.fromRawPath(picker.toUint8List());
+                // handleChanged(file);
               },
               child: Text(_value.url),
             )
@@ -420,10 +435,10 @@ class EngageInputState<T> extends State<EngageInput> {
             FlatButton(
               child: Text('Upload File'),
               onPressed: () async {
-                FilePickerCross picker = FilePickerCross(type: widget.fileType);
-                await picker.pick();
-                File file = File.fromRawPath(picker.toUint8List());
-                handleChanged(file);
+                // FilePickerCross picker = FilePickerCross(type: widget.fileType);
+                // await picker.pick();
+                // File file = File.fromRawPath(picker.toUint8List());
+                // handleChanged(file);
               },
             ),
         ],
@@ -501,12 +516,17 @@ class EngageInputState<T> extends State<EngageInput> {
   }
 
   handleChanged(dynamic value) {
+    var duration = Duration(milliseconds: widget.debounce);
     if (widget.controller == null)
       setState(() {
         _value = value;
       });
     if (widget.onChanged != null) {
-      widget.onChanged(value);
+      if (searchOnStoppedTyping != null) {
+        setState(() => searchOnStoppedTyping.cancel()); // clear timer
+      }
+      setState(() => searchOnStoppedTyping =
+          Timer(duration, () => widget.onChanged(value)));
     }
     if (widget.type == 'date' && widget.onSubmitted != null) {
       widget.onSubmitted(value);

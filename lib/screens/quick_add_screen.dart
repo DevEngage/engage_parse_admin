@@ -1,132 +1,27 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:file_picker_cross/file_picker_cross.dart';
+import 'package:engage_parse_admin/classes/engage_parse_object.dart';
+import 'package:engage_parse_admin/classes/project.dart';
+import 'package:engage_parse_admin/classes/quick_add.dart';
+import 'package:engage_parse_admin/classes/quick_add_segment.dart';
+import 'package:engage_parse_admin/classes/quick_add_tab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:engage_parse_admin/admin_theme.dart';
 import 'package:engage_parse_admin/widgets/confirm_widget.dart';
 import 'package:engage_parse_admin/widgets/input.dart';
 import 'package:engage_parse_admin/widgets/quick_list.dart';
-import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:parse_server_sdk/parse_server_sdk.dart';
-import 'package:smart_select/smart_select.dart';
-
-class QuickAdd<T> {
-  EdgeInsets margin;
-  String hintText;
-  String labelText;
-  String helperText;
-  String type;
-  dynamic initialValue;
-  String error;
-  TextInputType inputType;
-  TextInputAction inputAction;
-  FileTypeCross fileType;
-  bool autofocus;
-  bool correct;
-  int maxLines;
-  DateFormat dateFormat;
-  FocusNode node;
-  Widget smartLeading;
-  MaskTextInputFormatter mask;
-  bool readOnly;
-  T collection;
-  List<Map<String, String>> items;
-  List<SmartSelectOption<String>> smartOptions;
-  String addRoute;
-  ValueChanged<dynamic> onChanged;
-  ValueChanged<dynamic> onSubmitted;
-
-  QuickAdd({
-    this.margin = const EdgeInsets.only(bottom: 10),
-    this.hintText = '',
-    this.labelText = '',
-    this.helperText = '',
-    this.type = 'text',
-    this.initialValue,
-    this.error,
-    this.inputType = TextInputType.text,
-    this.inputAction = TextInputAction.done,
-    this.fileType = FileTypeCross.any,
-    this.autofocus = false,
-    this.correct = false,
-    this.readOnly = false,
-    this.maxLines,
-    this.dateFormat,
-    this.node,
-    this.smartLeading,
-    this.mask,
-    this.collection,
-    this.items,
-    this.smartOptions,
-    this.addRoute = '/quickAdd',
-    this.onChanged,
-    this.onSubmitted,
-  });
-}
-
-class QuickAddTab {
-  String name;
-  List<QuickAdd> children;
-  EngageParseObject collection;
-  EngageParseObject parent;
-  String type = 'form';
-  QuickAddTab({this.name, this.children, this.collection});
-  QuickAddTab.form({this.name, this.children, this.collection}) : type = 'form';
-  QuickAddTab.list({this.name, this.collection, this.parent}) : type = 'list';
-  QuickAddTab.media({this.name, this.collection, this.parent}) : type = 'media';
-}
-
-class QuickAddSegment<T> {
-  String name;
-  int index;
-  QuickAddSegmentForm collection;
-  EngageParseObject parent;
-  List<T> list;
-  QuickAddSegment(
-      {this.name, this.parent, this.collection, this.list, this.index});
-}
-
-abstract class QuickAddParse extends ParseObject {
-  QuickAddParse() : super('');
-  QuickAddParse.clone() : this();
-
-  @override
-  clone(Map map) => QuickAddParse;
-
-  String get tableName;
-
-  List<QuickAdd> getForm();
-  List<QuickAddSegment> getSegmentForm();
-  List<QuickAddTab> getTabForm();
-}
-
-abstract class QuickAddSegmentForm {
-  List<QuickAdd> getForm();
-  List<QuickAddTab> getTabForm();
-}
-
-abstract class EngageParseObject extends QuickAddParse {
-  String get name;
-  set name(String name) => String;
-
-  ParseFile get image;
-  set image(ParseFile name);
-
-  saveToArray(field, model);
-  removeFromArray(field, model);
-}
 
 class QuickAddScreen extends StatefulWidget {
   EngageParseObject collection;
   bool showAppBar;
   String addRoute;
+  final EngageProject project;
 
   QuickAddScreen({
     Key key,
     this.collection,
     this.showAppBar = true,
     this.addRoute = '/quickAdd',
+    this.project,
   }) : super(key: key);
 
   @override
@@ -141,6 +36,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
   bool showAppBar;
   String addRoute;
   int currentSegment = 0;
+  EngageProject project;
 
   @override
   void initState() {
@@ -148,6 +44,10 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
     collection = widget.collection;
     showAppBar = widget.showAppBar;
     addRoute = widget.addRoute;
+    if (widget.project != null)
+      project = widget.project;
+    else
+      project = EngageProject();
   }
 
   @override
@@ -172,6 +72,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
     parent = args['parent'];
     arrayToSave = args['arrayToSave'];
     model = args['model'];
+    if (args != null && args['project'] != null) project = widget.project;
     if (args != null && args['addRoute'] != null) addRoute = args['addRoute'];
     if (collection != null && collection.getTabForm().isNotEmpty) {
       return buildTabPage(context, collection);
@@ -193,7 +94,6 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
         parent.objectId != null &&
         collection != null &&
         arrayToSave == null) {
-      print(collection.tableName);
       collection.set((parent.tableName ?? '').toLowerCase(), parent,
           forceUpdate: true);
     }
@@ -373,6 +273,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
             'collection': item,
             'parent': value.parent,
             'addRoute': addRoute,
+            'project': project,
           }),
         ));
   }
@@ -387,6 +288,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
             'parent': value.parent,
             'arrayToSave': value.name.toLowerCase(),
             'addRoute': addRoute,
+            'project': project,
           }),
         ),
         body: Container(
@@ -412,6 +314,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
                                   'parent': value.parent,
                                   'arrayToSave': value.name.toLowerCase(),
                                   'addRoute': addRoute,
+                                  'project': project,
                                 }),
                             title: Text(item.name),
                           ),

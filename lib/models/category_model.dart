@@ -1,6 +1,4 @@
-// import 'package:engagefire/mobile.dart';
-
-import 'package:engage_parse_admin/screens/quick_add_screen.dart';
+import 'package:engage_parse_admin/classes/project.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
@@ -11,8 +9,6 @@ class GameCategory extends ParseObject
   GameCategory() : super(_keyTableName);
   GameCategory.clone() : this();
 
-  /// Looks strangely hacky but due to Flutter not using reflection, we have to
-  /// mimic a clone
   @override
   clone(Map map) => GameCategory.clone()..fromJson(map);
 

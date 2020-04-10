@@ -1,5 +1,4 @@
-// import 'package:engage_fitness_app/appTheme.dart';
-import 'package:engage_parse_admin/admin_theme.dart';
+import 'package:engage_parse_admin/classes/project.dart';
 import 'package:engage_parse_admin/providers/user_provider.dart';
 import 'package:engage_parse_admin/screens/home_screen.dart';
 import 'package:engage_parse_admin/widgets/confirm_widget.dart';
@@ -11,9 +10,9 @@ import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
-
-  LoginScreen() {
-    // _checkForUser();
+  EngageProject project;
+  LoginScreen({this.project}) {
+    if (project == null) project = EngageProject();
   }
 
   _checkForUser() async {
@@ -52,44 +51,21 @@ class LoginScreen extends StatelessWidget {
     return null;
   }
 
-  /* 
-  
-    EngageLoginScreen(
-                  logo: Image.asset(
-                    'assets/icon/logo.png',
-                    fit: BoxFit.fitWidth,
-                  ),
-                  logoIcon: Image.asset(
-                    'assets/icon/logo-icon.png',
-                    width: 133,
-                  ),
-                  startBackground: AssetImage('assets/images/rope-pullup.jpg'),
-                  loginBackground:
-                      AssetImage('assets/images/lunge-with-dumbbell.jpg'),
-                  signupBackground:w
-                      AssetImage('assets/images/lunge-with-dumbbell.jpg'),
-                  facebook: true,
-                  google: true,
-                  twitter: false,
-                ),
-   */
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
-      backgroundColor: AppTheme.figmaDarkPurple,
+      backgroundColor: project.theme().primaryColor,
       body: FlutterLogin(
-        theme: LoginTheme(
-          primaryColor: Colors.blue,
-          // buttonStyle: TextStyle(backgroundColor: AppTheme.figmaDarkPurple),
-        ),
-        title: 'Games Revealed',
+        theme: project.loginTheme(),
+        title: project.name,
         // logo: 'assets/icon/logo-icon.png',
         onLogin: (LoginData data) async =>
             await login(user, data.name.trim(), data.password),
-        onSignup: (LoginData data) async =>
-            await register(user, data.name.trim(), data.password),
+        onSignup: project.allowSignup == null
+            ? null
+            : (LoginData data) async =>
+                await register(user, data.name.trim(), data.password),
         onSubmitAnimationCompleted: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => HomeScreen(),
@@ -97,18 +73,6 @@ class LoginScreen extends StatelessWidget {
         },
         onRecoverPassword: (String name) => _recoverPassword(user, name),
       ),
-      // bottomNavigationBar: BottomAppBar(
-      //   child: Container(
-      //     child: Row(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: <Widget>[
-      //         FlatButton(
-      //             onPressed: () => skipLogin(context, user),
-      //             child: Text('Skip Login')),
-      //       ],
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

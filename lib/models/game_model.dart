@@ -1,14 +1,10 @@
-// import 'package:engagefire/mobile.dart';
-
+import 'package:engage_parse_admin/classes/engage_parse_object.dart';
 import 'package:engage_parse_admin/models/developer_model.dart';
-import 'package:engage_parse_admin/screens/quick_add_screen.dart';
+import 'package:engage_parse_admin/classes/project.dart';
 import 'package:flutter/material.dart';
 import 'package:engage_parse_admin/models/category_model.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
-/* TODO: 
-  [ ] Add Fields: Modes, Version
-*/
 class Game extends ParseObject implements ParseCloneable, EngageParseObject {
   Game() : super(_keyTableName);
   Game.clone() : this();
@@ -132,7 +128,9 @@ class Game extends ParseObject implements ParseCloneable, EngageParseObject {
         labelText: 'Image',
         type: 'image',
         initialValue: image,
-        onChanged: (value) => image = ParseFile(value),
+        onChanged: (value) {
+          image = ParseFile(value);
+        },
       ),
       QuickAdd(
         type: 'smartmulti',

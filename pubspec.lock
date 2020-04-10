@@ -126,14 +126,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.1"
-  file_picker_cross:
-    dependency: "direct main"
-    description:
-      name: file_picker_cross
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
+    version: "1.6.1"
   flushbar:
     dependency: transitive
     description:
@@ -219,13 +212,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
-  image_picker_web:
-    dependency: "direct main"
-    description:
-      name: image_picker_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.6"
   intl:
     dependency: transitive
     description:
