@@ -13,7 +13,7 @@ class Router {
       case '/':
         return GetRoute(
           page: user != null
-              ? HomeScreen(project: project)
+              ? HomeScreen(project: project, collections: collections)
               : LoginScreen(project: project),
           settings: settings,
         );

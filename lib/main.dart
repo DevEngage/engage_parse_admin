@@ -1,5 +1,6 @@
 import 'package:engage_parse_admin/classes/project.dart';
 import 'package:engage_parse_admin/engage.dart';
+import 'package:engage_parse_admin/models/game_model.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return Engage.init(user: user, project: EngageProject());
+    return Engage.init(
+        user: user, project: EngageProject(), collections: [Game()]);
   }
 }
 
