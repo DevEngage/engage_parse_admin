@@ -9,6 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:engage_parse_admin/admin_theme.dart';
+import 'package:get/get.dart';
 // import 'package:image_picker_web/image_picker_web.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -384,6 +385,7 @@ class EngageInputState<T> extends State<EngageInput> {
                   // // EngageParseFile(bytes: picker.toUint8List(), ext: picker.fileExtension, name: picker.toString());
                   // File file = File.fromRawPath(picker.toUint8List());
                   // handleChanged(file);
+                  Get.defaultDialog(title: 'Feature Coming Soon!');
                 },
                 child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -404,6 +406,7 @@ class EngageInputState<T> extends State<EngageInput> {
                 // file.getImageInfo
                 // print(file.toString());
                 // if (file != null) handleChanged(picker.toUint8List());
+                Get.defaultDialog(title: 'Feature Coming Soon!');
               },
             ),
         ],
@@ -425,6 +428,7 @@ class EngageInputState<T> extends State<EngageInput> {
                 // await picker.pick();
                 // File file = File.fromRawPath(picker.toUint8List());
                 // handleChanged(file);
+                Get.defaultDialog(title: 'Feature Coming Soon!');
               },
               child: Text(_value.url),
             )
@@ -439,6 +443,7 @@ class EngageInputState<T> extends State<EngageInput> {
                 // await picker.pick();
                 // File file = File.fromRawPath(picker.toUint8List());
                 // handleChanged(file);
+                Get.defaultDialog(title: 'Feature Coming Soon!');
               },
             ),
         ],

@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     List collections = widget.collections ??
         [
-          Game(),
+          // Game(),
         ];
     return Scaffold(
         appBar: AppBar(title: Text(Project.name), actions: routes(context)),

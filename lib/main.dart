@@ -3,17 +3,11 @@ import 'package:engage_parse_admin/engage.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
-// const String PARSE_APP_ID = '';
-// const String PARSE_APP_URL = '';
-// const String MASTER_KEY = '';
-// const String CLIENT_KEY = '';
-// const String LIVE_QUERY_URL = '';
-
-const String PARSE_APP_ID = 'HziMMuc14tLfbZHyexvypaQgsMh4guMHcSHyEW0X';
-const String PARSE_APP_URL = 'https://parseapi.back4app.com';
-const String MASTER_KEY = 'BbepyvqDWBwN1DUQKRzgWj2YnpfRXTrl9vYmeYjk';
-const String CLIENT_KEY = 'G6jS1s1Z4k8Ih67ihXNFPjvzsog7XNdLImDBsVox';
-const String LIVE_QUERY_URL = 'wss://trongdth.back4app.io';
+const String PARSE_APP_ID = '';
+const String PARSE_APP_URL = '';
+const String MASTER_KEY = '';
+const String CLIENT_KEY = '';
+const String LIVE_QUERY_URL = '';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
