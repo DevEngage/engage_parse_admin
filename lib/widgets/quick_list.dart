@@ -2,6 +2,7 @@ import 'package:engage_parse_admin/classes/engage_parse_object.dart';
 import 'package:engage_parse_admin/classes/project.dart';
 import 'package:flutter/material.dart';
 import 'package:engage_parse_admin/widgets/input.dart';
+import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
@@ -78,7 +79,7 @@ class _QuickListState extends State<QuickList> {
   }
 
   add() async {
-    await Navigator.pushNamed(context, widget.addRoute,
+    await Get.toNamed(widget.addRoute,
         arguments: {'collection': widget.collection, 'parent': widget.parent});
     await getList();
   }
@@ -88,7 +89,6 @@ class _QuickListState extends State<QuickList> {
       await widget.onTap(item);
       await getList();
     }
-    return null;
   }
 
   @override

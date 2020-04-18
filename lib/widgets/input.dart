@@ -291,81 +291,85 @@ class EngageInputState<T> extends State<EngageInput> {
 
   dateInput() {
     return DateTimeField(
-        focusNode: _node,
-        maxLines: widget.maxLines,
-        keyboardType: widget.inputType,
-        textInputAction: widget.inputAction,
-        obscureText: obscureText,
-        format: widget.dateFormat ?? DateFormat("MMM d, yyyy hh:mm a"),
-        onChanged: (DateTime value) => handleChanged(value),
-        autofocus: widget.autofocus,
-        initialValue: _value,
-        onShowPicker: (context, currentValue) async {
-          final date = await showDatePicker(
-              context: context,
-              firstDate: DateTime(1900),
-              initialDate: currentValue ?? DateTime.now(),
-              lastDate: DateTime(2100));
-          if (date != null) {
-            final time = await showTimePicker(
-              context: context,
-              initialTime:
-                  TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-            );
-            return DateTimeField.combine(date, time);
-          } else {
-            return currentValue;
-          }
-        },
-        // onFieldSubmitted: widget.onSubmitted,
-        decoration: getInputDecoration());
+      focusNode: _node,
+      maxLines: widget.maxLines,
+      keyboardType: widget.inputType,
+      textInputAction: widget.inputAction,
+      obscureText: obscureText,
+      format: widget.dateFormat ?? DateFormat("MMM d, yyyy hh:mm a"),
+      onChanged: (DateTime value) => handleChanged(value),
+      autofocus: widget.autofocus,
+      initialValue: _value,
+      onShowPicker: (context, currentValue) async {
+        final date = await showDatePicker(
+            context: context,
+            firstDate: DateTime(1900),
+            initialDate: currentValue ?? DateTime.now(),
+            lastDate: DateTime(2100));
+        if (date != null) {
+          final time = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+          );
+          return DateTimeField.combine(date, time);
+        } else {
+          return currentValue;
+        }
+      },
+      // onFieldSubmitted: widget.onSubmitted,
+      decoration: getInputDecoration(),
+    );
   }
 
   smartsingle() {
     return decorationBox(
-        size: 60,
-        padding: null,
-        child: SmartSelect<String>.single(
-            enabled: !widget.readOnly,
-            isLoading: isLoading,
-            leading: widget.collection != null &&
-                    widget.collection.getForm != null &&
-                    widget.readOnly == false
-                ? IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: goToQuickAdd,
-                  )
-                : widget.smartLeading,
-            title: widget.labelText,
-            value: _value,
-            options: _smartOptions,
-            choiceType: SmartSelectChoiceType.chips,
-            modalType: SmartSelectModalType.bottomSheet,
-            onChange: (val) => handleChanged(val)));
+      size: 60,
+      padding: null,
+      child: SmartSelect<String>.single(
+        enabled: !widget.readOnly,
+        isLoading: isLoading,
+        leading: widget.collection != null &&
+                widget.collection.getForm != null &&
+                widget.readOnly == false
+            ? IconButton(
+                icon: Icon(Icons.add),
+                onPressed: goToQuickAdd,
+              )
+            : widget.smartLeading,
+        title: widget.labelText,
+        value: _value,
+        options: _smartOptions,
+        choiceType: SmartSelectChoiceType.chips,
+        modalType: SmartSelectModalType.bottomSheet,
+        onChange: (val) => handleChanged(val),
+      ),
+    );
   }
 
   smartmulti() {
     return decorationBox(
-        size: 70,
-        padding: null,
-        child: SmartSelect<String>.multiple(
-            enabled: !widget.readOnly,
-            isLoading: isLoading,
-            isTwoLine: true,
-            leading: widget.collection != null &&
-                    widget.collection.getForm != null &&
-                    widget.readOnly == false
-                ? IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: goToQuickAdd,
-                  )
-                : widget.smartLeading,
-            title: widget.labelText,
-            value: _value,
-            options: _smartOptions,
-            choiceType: SmartSelectChoiceType.chips,
-            modalType: SmartSelectModalType.bottomSheet,
-            onChange: (val) => handleChanged(val)));
+      size: 70,
+      padding: null,
+      child: SmartSelect<String>.multiple(
+        enabled: !widget.readOnly,
+        isLoading: isLoading,
+        isTwoLine: true,
+        leading: widget.collection != null &&
+                widget.collection.getForm != null &&
+                widget.readOnly == false
+            ? IconButton(
+                icon: Icon(Icons.add),
+                onPressed: goToQuickAdd,
+              )
+            : widget.smartLeading,
+        title: widget.labelText,
+        value: _value,
+        options: _smartOptions,
+        choiceType: SmartSelectChoiceType.chips,
+        modalType: SmartSelectModalType.bottomSheet,
+        onChange: (val) => handleChanged(val),
+      ),
+    );
   }
 
   imageInput() {
@@ -479,7 +483,7 @@ class EngageInputState<T> extends State<EngageInput> {
 
   getDecoration() {
     return BoxDecoration(
-      color: widget.isDarkBackground ? Colors.blue : null,
+      color: widget.isDarkBackground ? Colors.white : null,
       borderRadius: BorderRadius.all(Radius.circular(6)),
       border: Border.all(
           color: widget.isDarkBackground

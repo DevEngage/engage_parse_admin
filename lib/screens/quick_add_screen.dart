@@ -9,6 +9,7 @@ import 'package:engage_parse_admin/admin_theme.dart';
 import 'package:engage_parse_admin/widgets/confirm_widget.dart';
 import 'package:engage_parse_admin/widgets/input.dart';
 import 'package:engage_parse_admin/widgets/quick_list.dart';
+import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 class QuickAddScreen extends StatefulWidget {
@@ -298,7 +299,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
         child: QuickList(
           collection: value.collection,
           parent: value.parent,
-          onTap: (item) => Navigator.pushNamed(context, addRoute, arguments: {
+          onTap: (item) => Get.toNamed(addRoute, arguments: {
             'collection': item,
             'parent': value.parent,
             'addRoute': addRoute,
@@ -312,7 +313,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'quickSegList',
         child: Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, addRoute, arguments: {
+        onPressed: () => Get.toNamed(addRoute, arguments: {
           'model': value.collection,
           'parent': value.parent,
           'arrayToSave': value.name.toLowerCase(),
@@ -334,18 +335,16 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
                     return Column(
                       children: <Widget>[
                         ListTile(
-                          // onTap: , // view
                           leading: item.image != null
                               ? Image.network(item.image.url)
                               : null,
-                          onTap: () => Navigator.pushNamed(context, '/quickAdd',
-                              arguments: {
-                                'model': item,
-                                'parent': value.parent,
-                                'arrayToSave': value.name.toLowerCase(),
-                                'addRoute': addRoute,
-                                'project': project,
-                              }),
+                          onTap: () => Get.toNamed('/quickAdd', arguments: {
+                            'model': item,
+                            'parent': value.parent,
+                            'arrayToSave': value.name.toLowerCase(),
+                            'addRoute': addRoute,
+                            'project': project,
+                          }),
                           title: Text(item.name,
                               style: project.darkMode
                                   ? TextStyle(color: project.white)
