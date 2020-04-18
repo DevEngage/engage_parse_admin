@@ -336,7 +336,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
         onPressed: () => addSegItem(value),
       ),
       body: Container(
-        child: value != null || value.list == null || value.list.isEmpty
+        child: value == null || value.list == null || value.list.isEmpty
             ? Center(
                 child: Text('Empty. Add Something!',
                     style: TextStyle(fontSize: 22)))
