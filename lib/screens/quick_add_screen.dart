@@ -242,29 +242,33 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
                   collection.tableName),
             )
           : null,
-      body: Container(
-        // padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 14,
-            ),
-            CupertinoSlidingSegmentedControl(
-              backgroundColor: Colors.purpleAccent,
-              thumbColor: AppTheme.figmaPurple,
-              onValueChanged: (value) => setState(() => currentSegment = value),
-              children: segmentList,
-              groupValue: currentSegment,
-            ),
-            if (form.length > 0 && currentSegment == 0)
-              Expanded(child: buildSinglePage(context, collection, false)),
-            ...formSegment.map((value) {
-              if (form.length > 0 && currentSegment == value.index) {
-                return Expanded(child: quickSegList(context, value));
-              }
-              return Text('');
-            }).toList(),
-          ],
+      body: LoadingOverlay(
+        isLoading: isLoading,
+        child: Container(
+          // padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 14,
+              ),
+              CupertinoSlidingSegmentedControl(
+                backgroundColor: Colors.purpleAccent,
+                thumbColor: AppTheme.figmaPurple,
+                onValueChanged: (value) =>
+                    setState(() => currentSegment = value),
+                children: segmentList,
+                groupValue: currentSegment,
+              ),
+              if (form.length > 0 && currentSegment == 0)
+                Expanded(child: buildSinglePage(context, collection, false)),
+              ...formSegment.map((value) {
+                if (form.length > 0 && currentSegment == value.index) {
+                  return Expanded(child: quickSegList(context, value));
+                }
+                return Text('');
+              }).toList(),
+            ],
+          ),
         ),
       ),
     );
@@ -331,41 +335,38 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
         child: Icon(Icons.add),
         onPressed: () => addSegItem(value),
       ),
-      body: LoadingOverlay(
-        isLoading: isLoading,
-        child: Container(
-          child: value.list == null || value.list.isEmpty
-              ? Center(
-                  child: Text('Empty. Add Something!',
-                      style: TextStyle(fontSize: 22)))
-              : ListView.builder(
-                  itemCount: value.list.length,
-                  itemBuilder: (context, index) {
-                    var item = value.list[index];
-                    return Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: item.image != null
-                              ? Image.network(item.image.url)
-                              : null,
-                          onTap: () => Get.toNamed('/quickAdd', arguments: {
-                            'model': item,
-                            'parent': value.parent,
-                            'arrayToSave': value.name.toLowerCase(),
-                            'addRoute': addRoute,
-                            'project': project,
-                          }),
-                          title: Text(item.name,
-                              style: project.darkMode
-                                  ? TextStyle(color: project.white)
-                                  : null),
-                        ),
-                        Divider(height: 1, color: Colors.grey, thickness: 1)
-                      ],
-                    );
-                  },
-                ),
-        ),
+      body: Container(
+        child: value != null || value.list == null || value.list.isEmpty
+            ? Center(
+                child: Text('Empty. Add Something!',
+                    style: TextStyle(fontSize: 22)))
+            : ListView.builder(
+                itemCount: value.list.length,
+                itemBuilder: (context, index) {
+                  var item = value.list[index];
+                  return Column(
+                    children: <Widget>[
+                      ListTile(
+                        leading: item.image != null
+                            ? Image.network(item.image.url)
+                            : null,
+                        onTap: () => Get.toNamed('/quickAdd', arguments: {
+                          'model': item,
+                          'parent': value.parent,
+                          'arrayToSave': value.name.toLowerCase(),
+                          'addRoute': addRoute,
+                          'project': project,
+                        }),
+                        title: Text(item.name,
+                            style: project.darkMode
+                                ? TextStyle(color: project.white)
+                                : null),
+                      ),
+                      Divider(height: 1, color: Colors.grey, thickness: 1)
+                    ],
+                  );
+                },
+              ),
       ),
     );
   }
