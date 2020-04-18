@@ -2,13 +2,14 @@ import 'package:engage_parse_admin/classes/engage_parse_object.dart';
 import 'package:engage_parse_admin/classes/project.dart';
 import 'package:flutter/material.dart';
 import 'package:engage_parse_admin/widgets/input.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
 class QuickList extends StatefulWidget {
   final List<EngageParseObject> list;
   final EngageParseObject collection;
   final EngageParseObject parent;
-  final onTap;
+  final Function onTap;
   final onLongPress;
   final addRoute;
   final appBar;
@@ -51,69 +52,88 @@ class _QuickListState extends State<QuickList> {
   }
 
   getList() async {
-    QueryBuilder query = QueryBuilder(widget.collection);
-    if (widget.parent != null) {
-      query.whereEqualTo(
-          (widget.parent.tableName.toLowerCase() ?? ''), widget.parent);
-    }
-    ParseResponse response = await query.query();
     setState(() {
-      if (response.success) {
-        quickList = List<EngageParseObject>.from(response.results ?? []);
-      } else {
-        quickList = [];
-      }
-      isLoading = false;
+      isLoading = true;
     });
+    try {
+      QueryBuilder query = QueryBuilder(widget.collection);
+      if (widget.parent != null) {
+        query.whereEqualTo(
+            (widget.parent.tableName.toLowerCase() ?? ''), widget.parent);
+      }
+      ParseResponse response = await query.query();
+      setState(() {
+        if (response.success) {
+          quickList = List<EngageParseObject>.from(response.results ?? []);
+        } else {
+          quickList = [];
+        }
+        isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  add() async {
+    await Navigator.pushNamed(context, widget.addRoute,
+        arguments: {'collection': widget.collection, 'parent': widget.parent});
+    await getList();
+  }
+
+  select(item) async {
+    if (widget.onTap != null) {
+      await widget.onTap(item);
+      await getList();
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: widget.appBar,
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => Navigator.pushNamed(context, widget.addRoute,
-              arguments: {
-                'collection': widget.collection,
-                'parent': widget.parent
-              }),
+      appBar: widget.appBar,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => add(),
+      ),
+      body: LoadingOverlay(
+        isLoading: isLoading,
+        child: Container(
+          child: ListView(
+            children: <Widget>[
+              Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: EngageInput(
+                    isDarkBackground: true,
+                    labelText: 'Search',
+                    onChanged: (value) => setState(
+                        () => searchTerm = (value ?? '').toLowerCase()),
+                  )),
+              for (EngageParseObject item in (quickList ?? [])
+                  .where((element) =>
+                      (element.name ?? '').toLowerCase().contains(searchTerm))
+                  .toList())
+                Column(children: <Widget>[
+                  ListTile(
+                    leading: item.image != null
+                        ? Image.network(item.image.url)
+                        : null,
+                    onTap: () => select(item),
+                    onLongPress: widget.onLongPress,
+                    title: Text(item.name,
+                        style: project.darkMode
+                            ? TextStyle(color: project.white)
+                            : null),
+                  ),
+                  Divider(height: 1, color: Colors.grey, thickness: 1)
+                ])
+            ],
+          ),
         ),
-        body: Container(
-            child: ListView(
-          children: <Widget>[
-            Container(
-                padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                child: EngageInput(
-                  isDarkBackground: true,
-                  labelText: 'Search',
-                  // helperText: 'e.g. hello@engagefitness.io',
-                  // initialValue: usersProvider.profile.lastName,
-                  onChanged: (value) =>
-                      setState(() => searchTerm = (value ?? '').toLowerCase()),
-                )),
-            for (EngageParseObject item in (quickList ?? [])
-                .where((element) =>
-                    (element.name ?? '').toLowerCase().contains(searchTerm))
-                .toList())
-              // EngageParseObject item = quickList[index];
-              Column(children: <Widget>[
-                ListTile(
-                  // onTap: , // view
-                  leading:
-                      item.image != null ? Image.network(item.image.url) : null,
-                  onTap: () =>
-                      widget.onTap != null ? widget.onTap(item) : null, // edit
-                  onLongPress: widget.onLongPress, // edit
-                  title: Text(item.name,
-                      style: project.darkMode
-                          ? TextStyle(color: project.white)
-                          : null),
-                  // subtitle: Text(item.body),
-                ),
-                Divider(height: 1, color: Colors.grey, thickness: 1)
-              ])
-          ],
-        )));
+      ),
+    );
   }
 }
