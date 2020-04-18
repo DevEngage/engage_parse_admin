@@ -134,7 +134,7 @@ class _QuickListState extends State<QuickList> {
                     onTap: () => select(item),
                     onLongPress: widget.onLongPress,
                     title: Text(item.name,
-                        style: project.darkMode
+                        style: project != null && project.darkMode == true
                             ? TextStyle(color: project.white)
                             : null),
                   ),

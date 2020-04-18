@@ -358,7 +358,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
                           'project': project,
                         }),
                         title: Text(item.name,
-                            style: project.darkMode
+                            style: project != null && project.darkMode == true
                                 ? TextStyle(color: project.white)
                                 : null),
                       ),
