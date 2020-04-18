@@ -82,7 +82,9 @@ class _QuickListState extends State<QuickList> {
   add() async {
     await Get.to(
       QuickAddScreen(
-        collection: widget.collection.clone(null),
+        collection: widget.collection is ParseObject
+            ? widget.collection.clone(null)
+            : widget.collection,
         parent: widget.parent,
         // arrayToSave: value.name.toLowerCase(),
         addRoute: widget.addRoute,

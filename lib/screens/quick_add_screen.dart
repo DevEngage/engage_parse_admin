@@ -11,6 +11,7 @@ import 'package:engage_parse_admin/widgets/input.dart';
 import 'package:engage_parse_admin/widgets/quick_list.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:parse_server_sdk/parse_server_sdk.dart';
 
 class QuickAddScreen extends StatefulWidget {
   final EngageParseObject collection;
@@ -83,7 +84,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
   addSegItem(value) {
     return Get.to(
       QuickAddScreen(
-        model: value.collection.clone != null
+        model: value.collection is ParseObject
             ? value.collection.clone(null)
             : value.collection,
         parent: value.parent,
