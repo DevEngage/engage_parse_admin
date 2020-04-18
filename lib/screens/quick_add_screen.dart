@@ -83,7 +83,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
   addSegItem(value) {
     return Get.to(
       QuickAddScreen(
-        model: widget.collection.clone(null),
+        model: collection.clone(null),
         parent: value.parent,
         arrayToSave: value.name.toLowerCase(),
         addRoute: addRoute,
