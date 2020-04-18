@@ -1,4 +1,5 @@
 import 'package:engage_parse_admin/classes/engage_parse_object.dart';
+import 'package:engage_parse_admin/classes/project.dart';
 import 'package:flutter/material.dart';
 import 'package:engage_parse_admin/widgets/input.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
@@ -11,6 +12,7 @@ class QuickList extends StatefulWidget {
   final onLongPress;
   final addRoute;
   final appBar;
+  final EngageProject project;
   QuickList({
     Key key,
     this.list = const [],
@@ -20,6 +22,7 @@ class QuickList extends StatefulWidget {
     this.parent,
     this.addRoute = '/quickAdd',
     this.appBar,
+    this.project,
   }) : super(key: key);
 
   @override
@@ -30,6 +33,7 @@ class _QuickListState extends State<QuickList> {
   List<EngageParseObject> quickList = [];
   bool isLoading = false;
   String searchTerm = '';
+  EngageProject project;
   @override
   void initState() {
     super.initState();
@@ -38,6 +42,7 @@ class _QuickListState extends State<QuickList> {
     } else {
       quickList = widget.list;
     }
+    project = widget.project ?? EngageProject();
   }
 
   @override
@@ -100,7 +105,10 @@ class _QuickListState extends State<QuickList> {
                   onTap: () =>
                       widget.onTap != null ? widget.onTap(item) : null, // edit
                   onLongPress: widget.onLongPress, // edit
-                  title: Text(item.name),
+                  title: Text(item.name,
+                      style: project.darkMode
+                          ? TextStyle(color: project.white)
+                          : null),
                   // subtitle: Text(item.body),
                 ),
                 Divider(height: 1, color: Colors.grey, thickness: 1)

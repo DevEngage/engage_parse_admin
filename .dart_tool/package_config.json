@@ -194,6 +194,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "loading_overlay",
+      "rootUri": "file:///Users/th3brink/development/flutter/.pub-cache/hosted/pub.dartlang.org/loading_overlay-0.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.2"
+    },
+    {
       "name": "mask_text_input_formatter",
       "rootUri": "file:///Users/th3brink/development/flutter/.pub-cache/hosted/pub.dartlang.org/mask_text_input_formatter-1.0.6",
       "packageUri": "lib/",
@@ -434,7 +440,7 @@
       "languageVersion": "2.3"
     }
   ],
-  "generated": "2020-04-10T20:04:56.870539Z",
+  "generated": "2020-04-18T15:46:45.730241Z",
   "generator": "pub",
   "generatorVersion": "2.8.0-dev.12.0.flutter-9983424a3c"
 }

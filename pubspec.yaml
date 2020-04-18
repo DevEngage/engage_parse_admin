@@ -39,6 +39,7 @@ dependencies:
   flutter_login: ^1.0.14
   badges: ^1.1.1
   # file_picker_cross: ^1.0.0
+  loading_overlay: ^0.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

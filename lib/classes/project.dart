@@ -39,6 +39,7 @@ class EngageProject {
   final String fontName = 'Roboto';
 
   final bool allowSignup = false;
+  final bool darkMode = true;
 
   EngageProject();
   EngageProject._();

@@ -9,6 +9,7 @@ import 'package:engage_parse_admin/admin_theme.dart';
 import 'package:engage_parse_admin/widgets/confirm_widget.dart';
 import 'package:engage_parse_admin/widgets/input.dart';
 import 'package:engage_parse_admin/widgets/quick_list.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
 class QuickAddScreen extends StatefulWidget {
   EngageParseObject collection;
@@ -37,6 +38,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
   String addRoute;
   int currentSegment = 0;
   EngageProject project;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -63,6 +65,12 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
       children[i + 1] = Text(segments[i].name);
     }
     return children;
+  }
+
+  setLoading([state = false]) {
+    setState(() {
+      isLoading = state;
+    });
   }
 
   @override
@@ -98,161 +106,178 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
           forceUpdate: true);
     }
     return Scaffold(
-        appBar: showAppBar && showAppBarInternal
-            ? AppBar(
-                title: Text((collection != null && collection.objectId != null
-                        ? 'Edit '
-                        : 'Create ') +
-                    (arrayToSave != null ? arrayToSave : collection.tableName)),
-              )
-            : null,
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: FloatingActionButton(
-                heroTag: 'buildSinglePageDelete',
-                child: Icon(Icons.delete),
-                backgroundColor: Colors.red,
-                onPressed: () async {
-                  confirmWidget(context,
-                      confirmText: 'Delete!',
-                      title: 'Warning!',
-                      message: 'You are about to delete this item',
-                      onAgreed: () async {
-                    if (arrayToSave != null) {
-                      await parent.removeFromArray(arrayToSave, model);
-                    } else {
-                      await collection.delete();
-                    }
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ),
-            FloatingActionButton(
-              heroTag: 'buildSinglePage',
-              child: Icon(Icons.save),
+      appBar: showAppBar && showAppBarInternal
+          ? AppBar(
+              title: Text((collection != null && collection.objectId != null
+                      ? 'Edit '
+                      : 'Create ') +
+                  (arrayToSave != null ? arrayToSave : collection.tableName)),
+            )
+          : null,
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: FloatingActionButton(
+              heroTag: 'buildSinglePageDelete',
+              child: Icon(Icons.delete),
+              backgroundColor: Colors.red,
               onPressed: () async {
-                if (arrayToSave != null) {
-                  await parent.saveToArray(arrayToSave, model);
-                } else {
-                  await collection.save();
-                }
-                Navigator.pop(context);
+                confirmWidget(context,
+                    confirmText: 'Delete!',
+                    title: 'Warning!',
+                    message: 'You are about to delete this item',
+                    warning: true, onAgreed: () async {
+                  setLoading(true);
+                  if (arrayToSave != null) {
+                    await parent.removeFromArray(arrayToSave, model);
+                  } else {
+                    await collection.delete();
+                  }
+                  setLoading(false);
+                  Navigator.pop(context);
+                });
               },
             ),
+          ),
+          FloatingActionButton(
+            heroTag: 'buildSinglePage',
+            child: Icon(Icons.save),
+            onPressed: () async {
+              setLoading(true);
+              if (arrayToSave != null) {
+                await parent.saveToArray(arrayToSave, model);
+              } else {
+                await collection.save();
+              }
+              setLoading(false);
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+      body: LoadingOverlay(
+        isLoading: isLoading,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ListView(children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(children: <Widget>[
+                      // Object's Parent Field
+                      if (parent != null && arrayToSave == null)
+                        buildInput(
+                          QuickAdd(
+                            labelText: parent.tableName + ' (parent)',
+                            type: 'smartsingle',
+                            collection: parent,
+                            initialValue: parent.objectId,
+                            readOnly: true,
+                          ),
+                        ),
+                      if (parent != null && arrayToSave == null)
+                        Column(
+                          children: <Widget>[
+                            Divider(
+                              color: AppTheme.figmaPurple,
+                              height: 18,
+                              thickness: 2,
+                            ),
+                            SizedBox(
+                              height: 12,
+                            )
+                          ],
+                        ),
+                      if (collection != null)
+                        ...collection
+                            .getForm()
+                            .map((value) => buildInput(value))
+                            .toList()
+                      else if (model != null)
+                        ...model
+                            .getForm()
+                            .map((value) => buildInput(value))
+                            .toList(),
+                    ])),
+              ]),
+            )
           ],
         ),
-        body: Column(children: <Widget>[
-          Expanded(
-            child: ListView(children: <Widget>[
-              Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(children: <Widget>[
-                    // Object's Parent Field
-                    if (parent != null && arrayToSave == null)
-                      buildInput(
-                        QuickAdd(
-                          labelText: parent.tableName + ' (parent)',
-                          type: 'smartsingle',
-                          collection: parent,
-                          initialValue: parent.objectId,
-                          readOnly: true,
-                          // onChanged: (value) async =>
-                          //     game = (await Game().getObject(value)).result,
-                        ),
-                      ),
-                    if (parent != null && arrayToSave == null)
-                      Column(
-                        children: <Widget>[
-                          Divider(
-                            color: AppTheme.figmaPurple,
-                            height: 18,
-                            thickness: 2,
-                          ),
-                          SizedBox(
-                            height: 12,
-                          )
-                        ],
-                      ),
-                    if (collection != null)
-                      ...collection
-                          .getForm()
-                          .map((value) => buildInput(value))
-                          .toList()
-                    else if (model != null)
-                      ...model
-                          .getForm()
-                          .map((value) => buildInput(value))
-                          .toList(),
-                  ])),
-            ]),
-          )
-        ]));
+      ),
+    );
   }
 
   buildSegPage(context, EngageParseObject collection) {
-    List<QuickAddTab> formTab = collection.getTabForm();
     List<QuickAdd> form = collection.getForm();
     List<QuickAddSegment> formSegment = collection.getSegmentForm();
 
     final segmentList = buildSegments(formSegment);
     return Scaffold(
-        appBar: showAppBar
-            ? AppBar(
-                title: Text(
-                    (collection.objectId != null ? 'Edit ' : 'Create ') +
-                        collection.tableName),
-              )
-            : null,
-        body: Container(
-            // padding: const EdgeInsets.all(16.0),
-            child: Column(children: <Widget>[
-          SizedBox(
-            height: 14,
+      appBar: showAppBar
+          ? AppBar(
+              title: Text((collection.objectId != null ? 'Edit ' : 'Create ') +
+                  collection.tableName),
+            )
+          : null,
+      body: LoadingOverlay(
+        isLoading: isLoading,
+        child: Container(
+          // padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 14,
+              ),
+              CupertinoSlidingSegmentedControl(
+                backgroundColor: Colors.purpleAccent,
+                thumbColor: AppTheme.figmaPurple,
+                onValueChanged: (value) =>
+                    setState(() => currentSegment = value),
+                children: segmentList,
+                groupValue: currentSegment,
+              ),
+              if (form.length > 0 && currentSegment == 0)
+                Expanded(child: buildSinglePage(context, collection, false)),
+              ...formSegment.map((value) {
+                if (form.length > 0 && currentSegment == value.index) {
+                  return Expanded(child: quickSegList(context, value));
+                }
+                return Text('');
+              }).toList(),
+            ],
           ),
-          CupertinoSlidingSegmentedControl(
-            backgroundColor: Colors.purpleAccent,
-            thumbColor: AppTheme.figmaPurple,
-            onValueChanged: (value) => setState(() => currentSegment = value),
-            children: segmentList,
-            groupValue: currentSegment,
-          ),
-          if (form.length > 0 && currentSegment == 0)
-            Expanded(child: buildSinglePage(context, collection, false)),
-          ...formSegment.map((value) {
-            if (form.length > 0 && currentSegment == value.index) {
-              return Expanded(child: quickSegList(context, value));
-            }
-            return Text('');
-          }).toList(),
-        ])));
+        ),
+      ),
+    );
   }
 
   buildTabPage(context, EngageParseObject collection) {
     List<QuickAddTab> formTab = collection.getTabForm();
     return DefaultTabController(
-        length: formTab.length,
-        child: Scaffold(
-            appBar: showAppBar
-                ? AppBar(
-                    title: Text(
-                        (collection.objectId != null ? 'Edit ' : 'Create ') +
-                            collection.tableName),
-                    bottom: TabBar(
-                      tabs: [
-                        ...formTab
-                            .map((tab) => Tab(
-                                  text: tab.name,
-                                ))
-                            .toList()
-                      ],
-                    ),
-                  )
-                : null,
-            body: TabBarView(children: [
+      length: formTab.length,
+      child: Scaffold(
+        appBar: showAppBar
+            ? AppBar(
+                title: Text(
+                    (collection.objectId != null ? 'Edit ' : 'Create ') +
+                        collection.tableName),
+                bottom: TabBar(
+                  tabs: [
+                    ...formTab
+                        .map((tab) => Tab(
+                              text: tab.name,
+                            ))
+                        .toList()
+                  ],
+                ),
+              )
+            : null,
+        body: LoadingOverlay(
+          isLoading: isLoading,
+          child: TabBarView(
+            children: [
               ...formTab.map((value) {
                 if (value.type == 'form') {
                   return buildSinglePage(context, value.collection, false);
@@ -260,7 +285,11 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
                   return quickList(context, value);
                 }
               }).toList(),
-            ])));
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   quickList(context, value) {
@@ -280,48 +309,56 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
 
   quickSegList(context, QuickAddSegment value) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'quickSegList',
-          child: Icon(Icons.add),
-          onPressed: () => Navigator.pushNamed(context, addRoute, arguments: {
-            'model': value.collection,
-            'parent': value.parent,
-            'arrayToSave': value.name.toLowerCase(),
-            'addRoute': addRoute,
-            'project': project,
-          }),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'quickSegList',
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.pushNamed(context, addRoute, arguments: {
+          'model': value.collection,
+          'parent': value.parent,
+          'arrayToSave': value.name.toLowerCase(),
+          'addRoute': addRoute,
+          'project': project,
+        }),
+      ),
+      body: LoadingOverlay(
+        isLoading: isLoading,
+        child: Container(
+          child: value.list == null || value.list.isEmpty
+              ? Center(
+                  child: Text('Empty. Add Something!',
+                      style: TextStyle(fontSize: 22)))
+              : ListView.builder(
+                  itemCount: value.list.length,
+                  itemBuilder: (context, index) {
+                    var item = value.list[index];
+                    return Column(
+                      children: <Widget>[
+                        ListTile(
+                          // onTap: , // view
+                          leading: item.image != null
+                              ? Image.network(item.image.url)
+                              : null,
+                          onTap: () => Navigator.pushNamed(context, '/quickAdd',
+                              arguments: {
+                                'model': item,
+                                'parent': value.parent,
+                                'arrayToSave': value.name.toLowerCase(),
+                                'addRoute': addRoute,
+                                'project': project,
+                              }),
+                          title: Text(item.name,
+                              style: project.darkMode
+                                  ? TextStyle(color: project.white)
+                                  : null),
+                        ),
+                        Divider(height: 1, color: Colors.grey, thickness: 1)
+                      ],
+                    );
+                  },
+                ),
         ),
-        body: Container(
-            child: value.list == null || value.list.isEmpty
-                ? Center(
-                    child: Text('Empty. Add Something!',
-                        style: TextStyle(fontSize: 22)))
-                : ListView.builder(
-                    itemCount: value.list.length,
-                    itemBuilder: (context, index) {
-                      var item = value.list[index];
-                      return Column(
-                        children: <Widget>[
-                          ListTile(
-                            // onTap: , // view
-                            leading: item.image != null
-                                ? Image.network(item.image.url)
-                                : null,
-                            onTap: () => Navigator.pushNamed(
-                                context, '/quickAdd',
-                                arguments: {
-                                  'model': item,
-                                  'parent': value.parent,
-                                  'arrayToSave': value.name.toLowerCase(),
-                                  'addRoute': addRoute,
-                                  'project': project,
-                                }),
-                            title: Text(item.name),
-                          ),
-                          Divider(height: 1, color: Colors.grey, thickness: 1)
-                        ],
-                      );
-                    })));
+      ),
+    );
   }
 
   buildInput(QuickAdd qa) {

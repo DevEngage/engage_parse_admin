@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 Future<void> confirmWidget(BuildContext context,
-    {onAgreed, onCancled, title = '', message = '', confirmText = 'Confirm'}) {
+    {onAgreed,
+    onCancled,
+    title = '',
+    message = '',
+    confirmText = 'Confirm',
+    warning = false}) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -10,14 +15,15 @@ Future<void> confirmWidget(BuildContext context,
         content: Text(message),
         actions: <Widget>[
           FlatButton(
-            child: Text('Cancel', style: TextStyle(color: Colors.red)),
+            child: Text('Cancel'),
             onPressed: () {
               if (onCancled != null) onCancled();
               Navigator.of(context).pop();
             },
           ),
           FlatButton(
-            child: Text(confirmText),
+            child: Text(confirmText,
+                style: TextStyle(color: warning ? Colors.red : null)),
             onPressed: () {
               if (onAgreed != null) onAgreed();
               Navigator.of(context).pop();
