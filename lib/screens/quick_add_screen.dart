@@ -13,10 +13,13 @@ import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 class QuickAddScreen extends StatefulWidget {
-  EngageParseObject collection;
-  bool showAppBar;
-  String addRoute;
+  final EngageParseObject collection;
+  final bool showAppBar;
+  final String addRoute;
   final EngageProject project;
+  final dynamic model;
+  final EngageParseObject parent;
+  final String arrayToSave;
 
   QuickAddScreen({
     Key key,
@@ -24,6 +27,9 @@ class QuickAddScreen extends StatefulWidget {
     this.showAppBar = true,
     this.addRoute = '/quickAdd',
     this.project,
+    this.model,
+    this.parent,
+    this.arrayToSave,
   }) : super(key: key);
 
   @override
@@ -47,10 +53,10 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
     collection = widget.collection;
     showAppBar = widget.showAppBar;
     addRoute = widget.addRoute;
-    if (widget.project != null)
-      project = widget.project;
-    else
-      project = EngageProject();
+    project = widget.project ?? EngageProject();
+    model = widget.model;
+    parent = widget.parent;
+    arrayToSave = widget.arrayToSave;
   }
 
   @override
@@ -74,13 +80,27 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
     });
   }
 
+  addSegItem(value) {
+    return Get.to(
+      QuickAddScreen(
+        model: widget.collection.clone(null),
+        parent: value.parent,
+        arrayToSave: value.name.toLowerCase(),
+        addRoute: addRoute,
+        project: project,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dynamic args = ModalRoute.of(context).settings.arguments;
-    collection = args['collection'];
-    parent = args['parent'];
-    arrayToSave = args['arrayToSave'];
-    model = args['model'];
+    if (args != null && args['collection'] != null)
+      collection = args['collection'];
+    if (args != null && args['parent'] != null) parent = args['parent'];
+    if (args != null && args['arrayToSave'] != null)
+      arrayToSave = args['arrayToSave'];
+    if (args != null && args['model'] != null) model = args['model'];
     if (args != null && args['project'] != null) project = widget.project;
     if (args != null && args['addRoute'] != null) addRoute = args['addRoute'];
     if (collection != null && collection.getTabForm().isNotEmpty) {
@@ -222,33 +242,29 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
                   collection.tableName),
             )
           : null,
-      body: LoadingOverlay(
-        isLoading: isLoading,
-        child: Container(
-          // padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 14,
-              ),
-              CupertinoSlidingSegmentedControl(
-                backgroundColor: Colors.purpleAccent,
-                thumbColor: AppTheme.figmaPurple,
-                onValueChanged: (value) =>
-                    setState(() => currentSegment = value),
-                children: segmentList,
-                groupValue: currentSegment,
-              ),
-              if (form.length > 0 && currentSegment == 0)
-                Expanded(child: buildSinglePage(context, collection, false)),
-              ...formSegment.map((value) {
-                if (form.length > 0 && currentSegment == value.index) {
-                  return Expanded(child: quickSegList(context, value));
-                }
-                return Text('');
-              }).toList(),
-            ],
-          ),
+      body: Container(
+        // padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 14,
+            ),
+            CupertinoSlidingSegmentedControl(
+              backgroundColor: Colors.purpleAccent,
+              thumbColor: AppTheme.figmaPurple,
+              onValueChanged: (value) => setState(() => currentSegment = value),
+              children: segmentList,
+              groupValue: currentSegment,
+            ),
+            if (form.length > 0 && currentSegment == 0)
+              Expanded(child: buildSinglePage(context, collection, false)),
+            ...formSegment.map((value) {
+              if (form.length > 0 && currentSegment == value.index) {
+                return Expanded(child: quickSegList(context, value));
+              }
+              return Text('');
+            }).toList(),
+          ],
         ),
       ),
     );
@@ -313,13 +329,7 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'quickSegList',
         child: Icon(Icons.add),
-        onPressed: () => Get.toNamed(addRoute, arguments: {
-          'model': value.collection,
-          'parent': value.parent,
-          'arrayToSave': value.name.toLowerCase(),
-          'addRoute': addRoute,
-          'project': project,
-        }),
+        onPressed: () => addSegItem(value),
       ),
       body: LoadingOverlay(
         isLoading: isLoading,

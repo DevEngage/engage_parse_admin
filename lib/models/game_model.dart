@@ -49,30 +49,29 @@ class Game extends ParseObject implements ParseCloneable, EngageParseObject {
   set image(ParseFile name) => set<ParseFile>('image', name);
 
   List<String> get categories =>
-      List<String>.from(get<List<String>>('categories', defaultValue: []));
+      List<String>.from(get('categories', defaultValue: []));
   set categories(List<String> name) => set<List<String>>('categories', name);
 
   String get source => get<String>('source', defaultValue: 'revealed');
   set source(String name) => set<String>('source', name);
 
-  List<String> get genres =>
-      List<String>.from(get<List<String>>('genres', defaultValue: []));
+  List<String> get genres => List<String>.from(get('genres', defaultValue: []));
   set genres(List<String> name) => set<List<String>>('genres', name);
 
   List<String> get platforms =>
-      List<String>.from(get<List<String>>('platforms', defaultValue: []));
+      List<String>.from(get('platforms', defaultValue: []));
   set platforms(List<String> name) => set<List<String>>('platforms', name);
 
   List<String> get characters =>
-      List<String>.from(get<List<String>>('characters', defaultValue: []));
+      List<String>.from(get('characters', defaultValue: []));
   set characters(List<String> name) => set<List<String>>('characters', name);
 
   List<String> get metaHistory =>
-      List<String>.from(get<List<String>>('metaHistory', defaultValue: []));
+      List<String>.from(get('metaHistory', defaultValue: []));
   set metaHistory(List<String> name) => set<List<String>>('metaHistory', name);
 
   List<String> get media => //Media
-      List<String>.from(get<List<String>>('media', defaultValue: []));
+      List<String>.from(get('media', defaultValue: []));
   set media(List<String> name) => set<List<String>>('media', name);
 
   // Future<List<Quiz>> getQuizzes() async {

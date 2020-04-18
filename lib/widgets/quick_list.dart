@@ -1,5 +1,6 @@
 import 'package:engage_parse_admin/classes/engage_parse_object.dart';
 import 'package:engage_parse_admin/classes/project.dart';
+import 'package:engage_parse_admin/screens/quick_add_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:engage_parse_admin/widgets/input.dart';
 import 'package:get/get.dart';
@@ -79,8 +80,17 @@ class _QuickListState extends State<QuickList> {
   }
 
   add() async {
-    await Get.toNamed(widget.addRoute,
-        arguments: {'collection': widget.collection, 'parent': widget.parent});
+    await Get.to(
+      QuickAddScreen(
+        collection: widget.collection.clone(null),
+        parent: widget.parent,
+        // arrayToSave: value.name.toLowerCase(),
+        addRoute: widget.addRoute,
+        project: project,
+      ),
+    );
+    // await Get.toNamed(widget.addRoute,
+    //     arguments: {'collection': widget.collection, 'parent': widget.parent});
     await getList();
   }
 
