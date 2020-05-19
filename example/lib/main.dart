@@ -1,3 +1,5 @@
+import 'package:engage_parse_admin/classes/project.dart';
+import 'package:engage_parse_admin/modals/privacy_policy_modal.dart';
 import 'package:engage_parse_admin/project.dart';
 import 'package:engage_parse_admin/providers/user_provider.dart';
 import 'package:engage_parse_admin/router.dart';
@@ -43,9 +45,10 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => UserProvider(user)),
         ],
         child: MaterialApp(
-          // onGenerateRoute: (RouteSettings settings) =>
-          //     Router.generateRoute(settings, user),
+          //   onGenerateRoute: (RouteSettings settings) =>
+          //       Router.generateRoute(settings, user, EngageProject(), []),
           initialRoute: "/",
+          home: MyHomePage(),
           navigatorKey: Get.key,
           title: 'Flutter Demo',
           theme: Project.theme,
@@ -55,9 +58,11 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({
+    Key key,
+  }) : super(key: key);
 
-  final String title;
+  final String title = 'example';
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -93,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => showEngagePrivacyPolicy(kitchenSink: true),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

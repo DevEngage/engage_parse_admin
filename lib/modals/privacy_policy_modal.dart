@@ -89,7 +89,7 @@ class EngagePrivacyPolicy extends StatelessWidget {
     Navigator.pop(context);
   }
 
-  headerText(String header, [fontSize = 18]) {
+  headerText(String header, [double fontSize = 18]) {
     return Text(
       '$header',
       style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
@@ -264,7 +264,7 @@ class EngagePrivacyPolicy extends StatelessWidget {
     );
   }
 
-  renderPartnerList(list) {
+  renderPartnerList(List<EngagePrivacyPartner> list) {
     return Column(
       children: <Widget>[
         for (EngagePrivacyPartner partner in list)
@@ -284,7 +284,7 @@ class EngagePrivacyPolicy extends StatelessWidget {
   }
 
   getDateTime(DateTime date) {
-    return date.toString();
+    return '${date.month}-${date.day}-${date.year}';
   }
 
   @override
@@ -558,15 +558,15 @@ showEngagePrivacyPolicy({
   legalName = 'DevEngage LLC',
   url = 'devengage.io',
   mobile = 'DevEngage',
-  effective,
-  contacts = const [
+  DateTime effective,
+  List<Map> contacts = const [
     {
       'type': 'email',
       'value': 'info@devengage.io',
     }
   ],
-  covers = const ['Website'],
-  personalData = const [
+  List<String> covers = const ['Website'],
+  List<String> personalData = const [
     'Email address',
     'First name and last name',
     'Phone number',
@@ -587,11 +587,11 @@ showEngagePrivacyPolicy({
   paypal = false,
   braintree = false,
   firebase = false,
-  analytics = const [],
-  advertising = const [],
-  remarketing = const [],
-  payments = const [],
-  storage = const [],
+  List<EngagePrivacyPartner> analytics = const [],
+  List<EngagePrivacyPartner> advertising = const [],
+  List<EngagePrivacyPartner> remarketing = const [],
+  List<EngagePrivacyPartner> payments = const [],
+  List<EngagePrivacyPartner> storage = const [],
 }) async {
   return Get.bottomSheet(
     isScrollControlled: true,

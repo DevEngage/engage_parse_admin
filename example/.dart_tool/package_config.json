@@ -165,7 +165,7 @@
     },
     {
       "name": "get",
-      "rootUri": "file:///Users/th3brink/development/flutter/.pub-cache/hosted/pub.dartlang.org/get-1.13.1-dev",
+      "rootUri": "file:///Users/th3brink/development/flutter/.pub-cache/hosted/pub.dartlang.org/get-1.14.1-dev",
       "packageUri": "lib/",
       "languageVersion": "2.1"
     },
@@ -482,7 +482,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-05-19T14:04:43.829384Z",
+  "generated": "2020-05-19T18:06:35.376731Z",
   "generator": "pub",
   "generatorVersion": "2.8.0-dev.18.0.flutter-eea9717938"
 }
