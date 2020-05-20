@@ -5,11 +5,11 @@ import 'package:engage_parse_admin/models/quiz_model.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
-// const String PARSE_APP_ID = '';
-// const String PARSE_APP_URL = '';
-// const String MASTER_KEY = '';
-// const String CLIENT_KEY = '';
-// const String LIVE_QUERY_URL = '';
+const String PARSE_APP_ID = '';
+const String PARSE_APP_URL = '';
+const String MASTER_KEY = '';
+const String CLIENT_KEY = '';
+const String LIVE_QUERY_URL = '';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
