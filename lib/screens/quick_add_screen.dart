@@ -336,7 +336,12 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'quickSegList',
         child: Icon(Icons.add),
-        onPressed: () => addSegItem(value),
+        onPressed: () async {
+          await addSegItem(value);
+          setState(() {
+            collection = collection;
+          });
+        },
       ),
       body: Container(
         child: value == null || value.list == null || value.list.isEmpty
@@ -353,13 +358,18 @@ class _QuickAddScreenState extends State<QuickAddScreen> {
                         leading: item.image != null
                             ? Image.network(item.image.url)
                             : null,
-                        onTap: () => Get.toNamed('/quickAdd', arguments: {
-                          'model': item,
-                          'parent': value.parent,
-                          'arrayToSave': value.name.toLowerCase(),
-                          'addRoute': addRoute,
-                          'project': project,
-                        }),
+                        onTap: () async {
+                          await Get.toNamed(addRoute, arguments: {
+                            'model': item,
+                            'parent': value.parent,
+                            'arrayToSave': value.name.toLowerCase(),
+                            'addRoute': addRoute,
+                            'project': project,
+                          });
+                          setState(() {
+                            collection = collection;
+                          });
+                        },
                         title: Text(item.name,
                             style: project != null && project.darkMode == true
                                 ? TextStyle(color: project.white)
